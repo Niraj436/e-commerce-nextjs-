@@ -1,9 +1,19 @@
+"use client"
 import React from "react";
 import { ItemProps } from "../../type";
 import { IoMdStar } from "react-icons/io";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/app/redux/cartSlice";
+import toast, { Toaster } from "react-hot-toast";
 
 const Product = ({ item }: ItemProps) => {
+  const dispatch = useDispatch()
+
+  const handleAdd = (item:any) => {
+     dispatch(addToCart(item))
+     toast.success(`${item.title} added to cart`)
+  }
   return (
     <div className="w-full rounded-lg overflow-hidden cursor-pointer border">
       <Link href={`/product/${item._id}`}>
@@ -27,7 +37,7 @@ const Product = ({ item }: ItemProps) => {
             <p>${item.price}</p>
           </div>
           <div className="flex justify-between">
-            <button className="px-3 py-1 t text-white rounded-full bg-orange-500 hover:bg-orange-700">
+            <button onClick={()=> handleAdd(item)} className="px-3 py-1 t text-white rounded-full bg-orange-500 hover:bg-orange-700">
               Add to cart
             </button>
             <div className="flex">
@@ -37,7 +47,7 @@ const Product = ({ item }: ItemProps) => {
             </div>
           </div>
         </div>
-     
+     <Toaster/>
     </div>
   );
 };

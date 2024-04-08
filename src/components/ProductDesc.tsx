@@ -1,11 +1,18 @@
 "use client"
 import React from 'react'
 import { FaShoppingCart } from "react-icons/fa";
-import { FaRegHeart } from "react-icons/fa6";
 import { FaHeart } from "react-icons/fa";
+import { useDispatch } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
+import { addToCart } from '@/app/redux/cartSlice';
 
 const ProductDesc = ({product}:any) => {
-    // console.log(product)
+    const dispatch = useDispatch()
+    const handleAdd = (product:any) => {
+        dispatch(addToCart(product))
+        toast.success(`${product.title} added to cart`)
+     }
+
   return (
     <div className='grid lg:grid-cols-2 grid-cols-1 p-4 gap-4 bg-white'>
         <div>
@@ -21,7 +28,7 @@ const ProductDesc = ({product}:any) => {
 
             <p>Category: {product.category}</p>
 
-            <div className='flex items-center group cursor-pointer'>
+            <div className='flex items-center group cursor-pointer' onClick={()=> handleAdd(product)}>
                 <button className='bg-slate-900 px-4 py-3 text-slate-100 rounded-sm border-r-2 border-slate-400'>Add to cart</button>
                 <span className='bg-slate-900 px-4 py-3.5 group-hover:bg-orange-500'><FaShoppingCart className='text-white text-xl' /></span>
             </div>
@@ -31,7 +38,7 @@ const ProductDesc = ({product}:any) => {
            
 
         </div>
-        <p></p>
+        <Toaster/>
     </div>
   )
 }

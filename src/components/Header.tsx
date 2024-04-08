@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "./Container";
 import Logo from "./Logo";
 import { FaSearch } from "react-icons/fa";
@@ -7,9 +7,34 @@ import { FaUser } from "react-icons/fa";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { FaShoppingCart } from "react-icons/fa";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useDispatch, useSelector } from "react-redux";
+import { IProducts, IStateProps } from "../../type";
+import Link from "next/link";
+import { addUSer, deleteUser } from "@/app/redux/cartSlice";
 
 const Header = () => {
+  const dispatch = useDispatch()
   const { data: session } = useSession();
+  const {productData} = useSelector((state:IStateProps)=>state.cart)
+  const [totalAmt, setTotalAmt] = useState(0)
+  useEffect(()=>{
+     const calculatedAmt = productData.reduce((acc:number, item:IProducts) =>{
+      return acc + (item.price * item.quantity)
+     },0)
+     setTotalAmt(calculatedAmt.toFixed(2) as any)
+  },[productData])
+
+  useEffect(()=>{
+    if(session){
+      dispatch(addUSer({
+        name:session.user?.name,
+        email:session.user?.email,
+        image: session.user?.image
+      }))
+    }else{
+      dispatch(deleteUser())
+    }
+  },[session,dispatch])
   return (
     <div className="h-20 sticky top-0 z-50 bg-orange-50">
       <Container className="h-full flex items-center justify-between md:gap-x-10 md:justify-start ">
@@ -35,15 +60,15 @@ const Header = () => {
         {
           session && <img src={session?.user?.image as string} alt="User image"  className="rounded-full size-10 cursor-pointer object-cover"/>
         }
-
+      <Link href={"/cart"}>
         <div className="flex  relative justify-center items-center gap-x-1 bg-black text-slate-100 rounded-full p-2 cursor-pointer hover:bg-slate-800 ">
           <FaShoppingCart className=" text-xl" />
-          <p>Cart</p>
-          <span className="absolute -right-2 -top-1 bg-white rounded-full text-orange-500 flex items-center justify-center shadow-lg text-xs px-1">
-            0.0
+          <p>{totalAmt == 0 ? "Cart" : `$${totalAmt}`}</p>
+          <span className="absolute -right-2 -top-1 bg-white rounded-full text-orange-500 flex items-center justify-center shadow-lg text-xs py-1 px-1.5">
+            {productData && productData.length}
           </span>
         </div>
-
+        </Link>
         {session && (
           <div
             className="text-white flex justify-center items-center bg-gray-400 rounded-full p-2 hover:cursor-pointer hover:bg-orange-300"

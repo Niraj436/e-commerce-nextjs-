@@ -15,3 +15,11 @@ export interface IProducts {
 export interface ItemProps {
     item: IProducts;
 }
+
+export interface IStateProps {
+    cart:{
+        productData:[],
+        userInfo:{},
+        orderData:[]
+    }
+}

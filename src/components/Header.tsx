@@ -4,6 +4,7 @@ import Container from "./Container";
 import Logo from "./Logo";
 import { FaSearch } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
+import { FaBookmark } from "react-icons/fa"
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { FaShoppingCart } from "react-icons/fa";
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -15,7 +16,7 @@ import { addUSer, deleteUser } from "@/app/redux/cartSlice";
 const Header = () => {
   const dispatch = useDispatch()
   const { data: session } = useSession();
-  const {productData} = useSelector((state:IStateProps)=>state.cart)
+  const {productData, orderData} = useSelector((state:IStateProps)=>state.cart)
   const [totalAmt, setTotalAmt] = useState(0)
   useEffect(()=>{
      const calculatedAmt = productData.reduce((acc:number, item:IProducts) =>{
@@ -23,7 +24,6 @@ const Header = () => {
      },0)
      setTotalAmt(calculatedAmt.toFixed(2) as any)
   },[productData])
-
   useEffect(()=>{
     if(session){
       dispatch(addUSer({
@@ -69,6 +69,21 @@ const Header = () => {
           </span>
         </div>
         </Link>
+        {
+          
+          // @ts-ignore
+          orderData.order.length > 0 && session && (
+            <Link href={"/order"}>
+            <div
+            className="text-white flex justify-center items-center bg-slate-900 rounded-full p-2 hover:cursor-pointer hover:bg-slate-700"
+           
+          >
+            <FaBookmark className="pr-1 text-lg" />
+            <p>Order</p>
+          </div>
+          </Link>
+          )
+        }
         {session && (
           <div
             className="text-white flex justify-center items-center bg-gray-400 rounded-full p-2 hover:cursor-pointer hover:bg-orange-300"

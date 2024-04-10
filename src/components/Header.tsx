@@ -72,7 +72,7 @@ const Header = () => {
         {
           
           // @ts-ignore
-          orderData.order.length > 0 && session && (
+          orderData?.order?.length > 0 && session && (
             <Link href={"/order"}>
             <div
             className="text-white flex justify-center items-center bg-slate-900 rounded-full p-2 hover:cursor-pointer hover:bg-slate-700"

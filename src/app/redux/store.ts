@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import cartReducer from "./cartSlice"
 import {
   persistStore,
@@ -18,6 +18,14 @@ const persistConfig = {
   version: 1,
   storage,
 }
+
+
+// let rootReducer = combineReducers({
+//   cart: cartReducer,
+//   // if u have another slice
+//   fav: favReducer, 
+// })
+// const persistedReducer = persistReducer(persistConfig, rootReducer) 
 
 const persistedReducer = persistReducer(persistConfig, cartReducer)
 

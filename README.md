@@ -39,5 +39,14 @@ To run this project, you will need to add the following environment variables to
 `GOOGLE_CLIENT_SECRET`
 `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` 
 
+## Login
+
+To login plz use the following credentials:
+
+```bash
+  Username: Niraj
+  Password: niraj
+```
+
 
 
